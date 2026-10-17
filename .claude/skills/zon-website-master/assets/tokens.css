@@ -1,0 +1,69 @@
+/* ZON design tokens. Contrast ratios are WCAG 2.x against the noted background. */
+:root {
+  /* Emerald – authority */
+  --zon-emerald-900: #0B3B2E; /* 11.6:1 on ivory-50 */
+  --zon-emerald-700: #145C46; /* 7.35:1 on ivory-50 */
+  --zon-emerald-100: #DCE8E1;
+
+  /* Walnut – warmth */
+  --zon-walnut-800: #4A3226;  /* 10.97:1 on ivory-50 */
+  --zon-walnut-600: #6B4A36;  /* 7.33:1 on ivory-50 */
+  --zon-walnut-100: #EADFD4;
+
+  /* Brass – accent only */
+  --zon-brass-300: #CDAE78;   /* 5.91:1 on emerald-900: text OK on dark */
+  --zon-brass-500: #B08D57;   /* 2.87:1 on ivory-50: decorative only */
+  --zon-brass-700: #8A6A3A;   /* 4.63:1 on ivory-50: text OK, use sparingly */
+
+  /* Ivory – surfaces */
+  --zon-ivory-50:  #FAF6EE;
+  --zon-ivory-100: #F3ECDF;
+  --zon-ivory-200: #E9DFCC;
+
+  /* Text */
+  --zon-ink:   #1C1A17;       /* 16.1:1 on ivory-50 */
+  --zon-muted: #5E574D;       /* 6.61:1 on ivory-50 */
+
+  /* Semantic */
+  --color-bg: var(--zon-ivory-50);
+  --color-surface: var(--zon-ivory-100);
+  --color-text: var(--zon-ink);
+  --color-text-muted: var(--zon-muted);
+  --color-primary: var(--zon-emerald-900);
+  --color-primary-hover: var(--zon-emerald-700);
+  --color-on-primary: var(--zon-ivory-50);
+  --color-accent: var(--zon-brass-500);
+  --color-accent-on-dark: var(--zon-brass-300);
+  --color-focus: var(--zon-brass-700);
+
+  /* Typography */
+  --font-display: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --text-xs: clamp(0.78rem, 0.76rem + 0.1vw, 0.84rem);
+  --text-sm: clamp(0.88rem, 0.86rem + 0.12vw, 0.95rem);
+  --text-base: clamp(1rem, 0.97rem + 0.18vw, 1.125rem);
+  --text-lg: clamp(1.2rem, 1.12rem + 0.4vw, 1.45rem);
+  --text-xl: clamp(1.6rem, 1.4rem + 1vw, 2.2rem);
+  --text-2xl: clamp(2.2rem, 1.8rem + 2vw, 3.4rem);
+  --text-display: clamp(2.8rem, 2rem + 4vw, 5.6rem);
+  --leading-tight: 1.08;
+  --leading-body: 1.6;
+  --tracking-caps: 0.14em;
+
+  /* Spacing (8px base) */
+  --space-1: 0.5rem; --space-2: 1rem; --space-3: 1.5rem; --space-4: 2rem;
+  --space-6: 3rem; --space-8: 4rem; --space-12: 6rem; --space-16: 8rem;
+  --container: 80rem;
+  --gutter: clamp(1rem, 4vw, 3rem);
+  --radius: 2px;
+
+  /* Motion */
+  --ease-arch: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-fast: 200ms; --dur-base: 400ms; --dur-slow: 600ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0ms; --dur-base: 0ms; --dur-slow: 0ms; }
+}
+
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
