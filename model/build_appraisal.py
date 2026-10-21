@@ -93,6 +93,7 @@ r += 1
 section(inp, r, "Доступне житло (S106)"); r += 1
 put(r, "aff", "Частка доступного житла", 0.30, "% юнітів", "Припущення за політикою Colchester; перевірити в угоді S106", PCT, True); r += 1
 put(r, "affval", "Ціна продажу RSL", 0.60, "% ринкової", "Припущення: мікс affordable rent + shared ownership", PCT, True); r += 1
+put(r, "afftype", "Який тип іде як доступне житло", 2, "1/2/3", "1 = Compact 61, 2 = Meadow 71, 3 = Country 140", NUM); r += 1
 r += 1
 section(inp, r, "Вартість будівництва"); r += 1
 put(r, "bc", "Будівництво бунгало", 2400, "£/м² GIA", "Припущення, діапазон £2 100–2 800: високий клас, ASHP + PV + MVHR", GBP, True); r += 1
@@ -193,9 +194,9 @@ def scenario(title, sheetname, counts, hub, route, prob, delay, abort):
     section(ws, r, "Виручка (GDV)", 6); r += 1
     line(r, "omv", "Бунгало за ринковою ціною", f"=E{tot}", GBP); r += 1
     line(r, "affn", "Юнітів доступного житла (вимога)", f"=ROUNDUP({R['dw']}*{A['aff']},0)", NUM, note="округлення вгору від усіх житлових юнітів"); r += 1
-    line(r, "affm", "…з них покривається Meadow 71", f"=MIN({R['affn']},B{meadow})", NUM); r += 1
-    line(r, "short", "Перевірка покриття", f'=IF({R["affm"]}<{R["affn"]},"Meadow замало — потрібні інші типи","OK")', "@"); r += 1
-    line(r, "affd", "Знижка на доступне житло", f"=-{R['affn']}*D{meadow}*(1-{A['affval']})", GBP, note="усі доступні юніти рахуються за ціною Meadow"); r += 1
+    line(r, "affm", "…з них покривається обраним типом", f"=MIN({R['affn']},INDEX(B5:B{tot-1},{A['afftype']}))", NUM); r += 1
+    line(r, "short", "Перевірка покриття", f'=IF({R["affm"]}<{R["affn"]},"Обраного типу замало — потрібні інші типи","OK")', "@"); r += 1
+    line(r, "affd", "Знижка на доступне житло", f"=-{R['affn']}*INDEX(D5:D{tot-1},{A['afftype']})*(1-{A['affval']})", GBP, note="усі доступні юніти — за ціною обраного типу"); r += 1
     line(r, "hubv", "ZON Hub: кав'ярня (капіталізація)", f"={R['hub']}*{A['cafegia']}*{A['caferent']}/{A['cafeyield']}", GBP); r += 1
     line(r, "aptv", "ZON Hub: апартаменти", f"={R['hub']}*{A['apts']}*{A['aptval']}", GBP); r += 1
     line(r, "gdv", "GDV разом", f"=SUM({R['omv']},{R['affd']},{R['hubv']},{R['aptv']})", GBP, bold=True); r += 1
