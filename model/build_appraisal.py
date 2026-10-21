@@ -47,12 +47,12 @@ hdr(inp, 4, ["Тип юніта", "GIA, м²", "Спальні", "Мешканц
              "NDSS мін., м²", "NDSS ок?", "Ціна продажу, £/м²", "Ціна юніта, £",
              "Ділянка (сад+будинок), м²", "Джерело / примітка"])
 types = [
-    ("Lake House Compact 61", 61.5, 2, 3, 1, 61, 4880, 340,
-     "GIA з брифу. NDSS 2b3p 1 пов. = 61 м² (не проходить як 2b4p = 70). Ціна — припущення."),
-    ("Meadow 71", 71, 2, 4, 1, 70, 4650, 370,
-     "GIA з брифу. NDSS 2b4p 1 пов. = 70 м². Юніт для доступного житла S106. Ціна — припущення."),
-    ("Country 140", 140, 3, 6, 1, 95, 4640, 560,
-     "GIA з брифу. NDSS 3b6p 1 пов. = 95 м². Ціна — припущення."),
+    ("Lake House Compact 61", 61.5, 2, 3, 1, 61, "=340000/B{r}", 340,
+     "GIA з брифу. NDSS 2b3p 1 пов. = 61 м². Ціна £340k — робоча ціна команди ZON, не підтверджена агентом."),
+    ("Meadow 71", 71, 2, 4, 1, 70, "=390000/B{r}", 370,
+     "GIA з брифу. NDSS 2b4p 1 пов. = 70 м². Ціна £390k — робоча ціна команди ZON, не підтверджена агентом."),
+    ("Country 140", 140, 3, 6, 1, 95, "=550000/B{r}", 560,
+     "GIA з брифу. NDSS 3b6p 1 пов. = 95 м². Ціна £550k — робоча ціна команди ZON, не підтверджена агентом."),
 ]
 TYPE_ROWS = []
 for i, t in enumerate(types):
@@ -60,6 +60,7 @@ for i, t in enumerate(types):
     name, gia, beds, ppl, st, ndss, price, plot, note = t
     inp.cell(r, 1, name).font = BLACK
     for col, v in zip([2, 3, 4, 5, 6, 8, 10], [gia, beds, ppl, st, ndss, price, plot]):
+        if isinstance(v, str): v = v.format(r=r)
         c = inp.cell(r, col, v); c.font = BLUE
     inp.cell(r, 7, f'=IF(B{r}>=F{r},"Так","НІ")').font = BLACK
     inp.cell(r, 9, f"=B{r}*H{r}").font = BLACK
@@ -69,7 +70,7 @@ for i, t in enumerate(types):
     inp.cell(r, 9).number_format = GBP
     inp.cell(r, 10).number_format = NUM
     inp.cell(r, 8).fill = YEL
-inp["A9"] = ("Ціни £/м² — ринкове припущення (~£430–455/фут²) для нових бунгало в CO7. "
+inp["A9"] = ("Ціни — робочі ціни команди ZON (£340k / £390k / £550k). "
              "Треба підтвердити звітом агента (Savills / Fenn Wright / Beresfords).")
 inp["A9"].font = Font(name=F, italic=True); inp.merge_cells("A9:K9")
 
@@ -93,11 +94,11 @@ r += 1
 section(inp, r, "Доступне житло (S106)"); r += 1
 put(r, "aff", "Частка доступного житла", 0.30, "% юнітів", "Припущення за політикою Colchester; перевірити в угоді S106", PCT, True); r += 1
 put(r, "affval", "Ціна продажу RSL", 0.60, "% ринкової", "Припущення: мікс affordable rent + shared ownership", PCT, True); r += 1
-put(r, "afftype", "Який тип іде як доступне житло", 2, "1/2/3", "1 = Compact 61, 2 = Meadow 71, 3 = Country 140", NUM); r += 1
+put(r, "afftype", "Який тип іде як доступне житло", 1, "1/2/3", "1 = Compact 61, 2 = Meadow 71, 3 = Country 140", NUM); r += 1
 r += 1
 section(inp, r, "Вартість будівництва"); r += 1
-put(r, "bc", "Будівництво бунгало", 2400, "£/м² GIA", "Припущення, діапазон £2 100–2 800: високий клас, ASHP + PV + MVHR", GBP, True); r += 1
-put(r, "bchub", "Будівництво ZON Hub", 3000, "£/м² GIA", "Припущення: змішане використання, комерційне обладнання", GBP); r += 1
+put(r, "bc", "Будівництво бунгало (під ключ)", "='Собівартість будинку'!$E$27", "£/м² GIA", "Розрахунок з оболонки ZON £1 700/м² — аркуш «Собівартість будинку»", GBP, True); inp.cell(r, 2).font = GREEN; r += 1
+put(r, "bchub", "Будівництво ZON Hub", 2800, "£/м² GIA", "Припущення: змішане використання, комерційне обладнання", GBP); r += 1
 put(r, "ext", "Зовнішні роботи та мережі", 0.15, "% будівництва", "Припущення: дороги, SuDS, містки, мережі, підстанція", PCT); r += 1
 put(r, "cont", "Резерв на непередбачене", 0.05, "% буд.+зовн.", "Припущення", PCT); r += 1
 put(r, "fees", "Проєктування та консультанти", 0.10, "% буд.+зовн.", "Припущення", PCT); r += 1
@@ -136,6 +137,86 @@ inp.freeze_panes = "A5"
 
 def T(row, col):  # ref to type table
     return f"{P}${col}${row}"
+
+
+# ---------------------------------------------------------------- House cost build-up
+cb = wb.create_sheet("Собівартість будинку")
+cb["A1"] = "Собівартість будинку під ключ — від оболонки ZON £1 700/м²"; cb["A1"].font = TITLE
+cb["A2"] = ("Оболонка ZON (£1 700/м²) містить лише будинок і систему опалення. Усе, що потрібно, щоб будинок "
+            "можна було продати під іпотеку, додано нижче. Ставки — припущення центрального сценарію; діапазони в примітках.")
+cb["A2"].font = Font(name=F, italic=True); cb.merge_cells("A2:F2")
+cb["A2"].alignment = Alignment(wrap_text=True); cb.row_dimensions[2].height = 45
+hdr(cb, 4, ["Стаття", "База", "Compact 61", "Meadow 71", "Country 140", "Примітка / діапазон"])
+cb["A5"] = "GIA, м²"
+for j, tr in enumerate(TYPE_ROWS):
+    c = cb.cell(5, 3 + j, f"={T(tr,'B')}"); c.font = GREEN; c.number_format = NUM1
+cb["A6"] = "Кількість у сценарії A"
+for j in range(3):
+    c = cb.cell(6, 3 + j, f"='Сценарій A'!$B${5+j}"); c.font = GREEN; c.number_format = NUM
+
+# (label, basis, rate or per-type values, note)  basis: m2 = rate × GIA, unit = per-type £
+items = [
+    ("Оболонка ZON + опалення", "m2", 1700, "Від команди ZON. Стіни, дах, вікна, опалення"),
+    ("Фундаменти", "m2", 160, "£120–220/м²; гвинтові палі — нижня межа"),
+    ("Доставка, кран, монтаж, герметизація", "m2", 120, "£90–160/м²"),
+    ("Підлоги та фарбування", "m2", 60, "£40–80/м²"),
+    ("Сонячні панелі в дах (вимога Future Homes Standard)", "unit", (6500, 6500, 8500), "3–5 кВт; батарея — опція ZON Ready"),
+    ("Вентиляція (dMEV)", "unit", (2000, 2000, 3500), "MVHR — +£3–4k"),
+    ("Кухня з технікою", "unit", (9000, 10000, 15000), "середній клас"),
+    ("Санвузли", "unit", (6000, 6000, 12000), "Country — 2 санвузли"),
+    ("Гарантія 10 років, Building Control, SAP/EPC, тест повітря", "unit", (3500, 3500, 3500), "без гарантії немає іпотеки"),
+    ("Роботи на ділянці: тераса, огорожа, доріжки, газон", "unit", (6000, 6000, 9000), "живоплоти з граба — тут"),
+]
+r = 8
+section(cb, 7, "Прямі витрати на будинок (за одиницю, £)", 6)
+first = r
+for lab, basis, rate, note in items:
+    cb.cell(r, 1, lab).font = BLACK
+    if basis == "m2":
+        c = cb.cell(r, 2, rate); c.font = BLUE; c.number_format = GBP
+        for j in range(3):
+            col = chr(ord("C") + j)
+            cb.cell(r, 3 + j, f"=$B{r}*{col}$5").number_format = GBP
+    else:
+        cb.cell(r, 2, "за будинок").font = BLACK
+        for j, v in enumerate(rate):
+            c = cb.cell(r, 3 + j, v); c.font = BLUE; c.number_format = GBP
+    cb.cell(r, 6, note).font = Font(name=F, italic=True, color="666666")
+    r += 1
+last = r - 1
+cb.cell(r, 1, "Разом прямі").font = BOLD
+for j in range(3):
+    col = chr(ord("C") + j)
+    c = cb.cell(r, 3 + j, f"=SUM({col}{first}:{col}{last})"); c.font = BOLD; c.number_format = GBP
+direct = r; r += 1
+cb.cell(r, 1, "Майданчик і маржа підрядника").font = BLACK
+c = cb.cell(r, 2, 0.12); c.font = BLUE; c.number_format = PCT
+cb.cell(r, 6, "10–15%; менше, якщо ZON сам веде будівництво").font = Font(name=F, italic=True, color="666666")
+for j in range(3):
+    col = chr(ord("C") + j)
+    cb.cell(r, 3 + j, f"={col}{direct}*$B{r}").number_format = GBP
+prel = r; r += 1
+cb.cell(r, 1, "Будинок під ключ, £").font = BOLD
+for j in range(3):
+    col = chr(ord("C") + j)
+    c = cb.cell(r, 3 + j, f"={col}{direct}+{col}{prel}"); c.font = BOLD; c.number_format = GBP
+turnkey = r; r += 1
+cb.cell(r, 1, "Під ключ, £/м²").font = BOLD
+for j in range(3):
+    col = chr(ord("C") + j)
+    c = cb.cell(r, 3 + j, f"=IF({col}5>0,{col}{turnkey}/{col}5,0)"); c.font = BOLD; c.number_format = GBP
+r += 2
+assert r <= 27, r
+cb["A27"] = "Середнє під ключ для міксу сценарію A, £/м²"; cb["A27"].font = BOLD
+cb["E27"] = f"=SUMPRODUCT(C{turnkey}:E{turnkey},C6:E6)/SUMPRODUCT(C5:E5,C6:E6)"
+cb["E27"].font = BOLD; cb["E27"].number_format = GBP; cb["E27"].fill = YEL
+cb["A28"] = ("Не входить сюди (рахується в моделі окремо): дороги, мережі та підключення, SuDS — «Зовнішні роботи»; "
+             "проєктування, резерв, S106, продаж, фінансування, земля.")
+cb["A28"].font = Font(name=F, italic=True); cb.merge_cells("A28:F28")
+cb["A28"].alignment = Alignment(wrap_text=True); cb.row_dimensions[28].height = 30
+cb.column_dimensions["A"].width = 56; cb.column_dimensions["B"].width = 14
+for col in "CDE": cb.column_dimensions[col].width = 16
+cb.column_dimensions["F"].width = 46
 
 # ---------------------------------------------------------------- Scenarios
 def scenario(title, sheetname, counts, hub, route, prob, delay, abort):
@@ -250,7 +331,7 @@ def scenario(title, sheetname, counts, hub, route, prob, delay, abort):
     return ws, R
 
 sa, RA = scenario("Сценарій A — 25 бунгало в межах outline consent", "Сценарій A",
-                  [9, 9, 7], 0,
+                  [10, 8, 7], 0,
                   "Шлях: Reserved Matters. Без Hub. Відповідає ліміту 25 юнітів (за словами користувача).",
                   0.85, 0, 100000)
 sb, RB = scenario("Сценарій B — бриф: 25 бунгало + ZON Hub (4 апартаменти + кав'ярня) = 29 житлових", "Сценарій B",
