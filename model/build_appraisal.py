@@ -305,6 +305,87 @@ sm.column_dimensions["A"].width = 44
 for col in "BCDEF": sm.column_dimensions[col].width = 20
 sm.row_dimensions[4].height = 32
 
+
+# ---------------------------------------------------------------- Improved case
+im = wb.create_sheet("Покращений випадок", 1)
+im["A1"] = "Improved Case — важелі поверх сценарію A (25 бунгало)"; im["A1"].font = TITLE
+im["A2"] = ("Кожен важіль рахується окремо від бази сценарію A. Сині клітинки — припущення важелів "
+            "(з запропонованої стратегії), жовті — ті, що найбільше впливають і потребують підтвердження.")
+im["A2"].font = Font(name=F, italic=True); im.merge_cells("A2:D2")
+im["A2"].alignment = Alignment(wrap_text=True); im.row_dimensions[2].height = 30
+Q = "'Сценарій A'!"
+I = {}
+def il(r, key, label, val, fmt, font=BLACK, note=None, bold=False, yellow=False):
+    im.cell(r, 1, label).font = BOLD if bold else BLACK
+    c = im.cell(r, 2, val); c.font = BOLD if bold else font; c.number_format = fmt
+    if yellow: c.fill = YEL
+    if note: im.cell(r, 3, note).font = Font(name=F, italic=True, color="666666")
+    I[key] = f"$B${r}"
+
+r = 4
+section(im, r, "База: сценарій A", 4); r += 1
+il(r, "gdv0", "GDV бази", f"={Q}{RA['gdv']}", GBP, GREEN); r += 1
+il(r, "p0", "Прибуток бази", f"={Q}{RA['profit']}", GBP, GREEN); r += 1
+il(r, "m0", "Маржа бази", f"={Q}{RA['mgdv']}", PCT, GREEN); r += 1
+
+r += 1
+section(im, r, "1. ZON Hub — продаж за капіталізованою вартістю (без апартаментів)", 4); r += 1
+il(r, "hinc", "Чистий річний дохід Hub", 27500, GBP, BLUE, "стратегія: £25–30k; потрібен договір з оператором", yellow=True); r += 1
+il(r, "hyld", "Ставка капіталізації", 0.07, PCT, BLUE, "стратегія: 7%; для кав'ярні реалістичніше 8–10%", yellow=True); r += 1
+il(r, "hcost", "Повна вартість Hub (будівля + fit-out)", 390000, GBP, BLUE, "стратегія: £390k ≈ £2 230/м² на 175 м² — перевірити QS", yellow=True); r += 1
+il(r, "hval", "Капіталізована вартість", f"={I['hinc']}/{I['hyld']}", GBP); r += 1
+il(r, "hup", "Приріст прибутку від Hub", f"={I['hval']}*(1-{A['sales']})-{I['hcost']}", GBP, bold=True,
+   note="у сценарії A Hub не закладено, тож віднімаємо і його вартість"); r += 1
+
+r += 1
+section(im, r, "2. Пакети ZON Ready", 4); r += 1
+il(r, "zmkt", "Ринкових юнітів (без доступного житла)", f"={Q}{RA['dw']}-{Q}{RA['affn']}", NUM,
+   note="RSL не купує апгрейди"); r += 1
+il(r, "zupt", "Частка покупців, що беруть пакет", 0.6, PCT, BLUE, "стратегія припускала 100% на 25 юнітів", yellow=True); r += 1
+il(r, "zprice", "Ціна пакета", 35000, GBP, BLUE, "стратегія"); r += 1
+il(r, "zcost", "Собівартість пакета", 20000, GBP, BLUE, "стратегія"); r += 1
+il(r, "zn", "Пакетів продано", f"=ROUND({I['zmkt']}*{I['zupt']},0)", NUM); r += 1
+il(r, "zrev", "Додаткова виручка", f"={I['zn']}*{I['zprice']}", GBP); r += 1
+il(r, "zup", "Приріст прибутку від пакетів", f"={I['zn']}*({I['zprice']}*(1-{A['sales']})-{I['zcost']})", GBP, bold=True); r += 1
+
+r += 1
+section(im, r, "3. Value engineering", 4); r += 1
+il(r, "ve", "Економія на будівельних витратах", 0.04, PCT, BLUE, "стратегія: 3–5%; підтверджує QS"); r += 1
+il(r, "veup", "Приріст прибутку", f"={Q}{RA['blink']}*{I['ve']}", GBP, bold=True); r += 1
+
+r += 1
+section(im, r, "4. Переговори про ціну землі", 4); r += 1
+il(r, "ld", "Знижка на землю", 140000, GBP, BLUE, "стратегія: £100–180k"); r += 1
+il(r, "ldup", "Приріст прибутку (з SDLT і фінансуванням землі)",
+   f"={I['ld']}*(1+{A['landcost']})*(1+{A['rate']}*({A['months']}+{Q}{RA['delay']})/12)", GBP, bold=True); r += 1
+
+r += 1
+section(im, r, "5. Зниження витрат на продаж", 4); r += 1
+il(r, "sc", "Зниження статті «маркетинг і агенти»", 0.25, PCT, BLUE, "стратегія: £50–70k"); r += 1
+il(r, "scup", "Приріст прибутку", f"={Q}{RA['sales']}*{I['sc']}", GBP, bold=True); r += 1
+
+r += 1
+section(im, r, "6. Траншеве залучення equity (довідково, НЕ в сумі)", 4); r += 1
+il(r, "eq", "Equity разом", 2560000, GBP, BLUE, "стратегія"); r += 1
+il(r, "eqr", "Priority return", 0.12, PCT, BLUE, "стратегія"); r += 1
+il(r, "eq1", "Перший транш", 800000, GBP, BLUE, "стратегія"); r += 1
+il(r, "eqm", "Строк, місяців", 24, NUM, BLUE); r += 1
+il(r, "eqm2", "Строк другого траншу, місяців", 15, NUM, BLUE); r += 1
+il(r, "eqfull", "Return при внесенні всього одразу", f"={I['eq']}*{I['eqr']}*{I['eqm']}/12", GBP); r += 1
+il(r, "eqtr", "Return при траншах",
+   f"={I['eq1']}*{I['eqr']}*{I['eqm']}/12+({I['eq']}-{I['eq1']})*{I['eqr']}*{I['eqm2']}/12", GBP); r += 1
+il(r, "eqsave", "Економія", f"={I['eqfull']}-{I['eqtr']}", GBP, bold=True,
+   note="база моделі фінансується боргом 9%, а не equity 12% — тому не додаємо до суми"); r += 1
+
+r += 1
+section(im, r, "Результат Improved Case", 4); r += 1
+il(r, "up", "Сума важелів 1–5", f"={I['hup']}+{I['zup']}+{I['veup']}+{I['ldup']}+{I['scup']}", GBP, bold=True); r += 1
+il(r, "p1", "Прибуток Improved Case", f"={I['p0']}+{I['up']}", GBP, bold=True); r += 1
+il(r, "g1", "GDV Improved Case", f"={I['gdv0']}+{I['hval']}+{I['zrev']}", GBP); r += 1
+il(r, "m1", "Маржа на GDV", f"=IF({I['g1']}<>0,{I['p1']}/{I['g1']},0)", PCT, bold=True); r += 1
+il(r, "gap", "Скільки ще бракує до цільової маржі", f"=MAX(0,{A['target']}*{I['g1']}-{I['p1']})", GBP, bold=True); r += 1
+im.column_dimensions["A"].width = 52; im.column_dimensions["B"].width = 18; im.column_dimensions["C"].width = 70
+
 for ws in wb.worksheets:
     for row in ws.iter_rows():
         for c in row:
