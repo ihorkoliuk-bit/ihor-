@@ -91,6 +91,9 @@ def svg(spec):
         o.append(f'<rect x="{X(x):.1f}" y="{Y(y):.1f}" width="{w*S:.1f}" height="{h*S:.1f}" fill="none" stroke="#2B2B2B" stroke-width="12"/>')
     # exterior wall
     o.append(f'<rect x="{X(0)}" y="{Y(0)}" width="{W*S}" height="{H*S}" fill="none" stroke="#2B2B2B" stroke-width="30"/>')
+    for nx,ny,nw,nh in spec.get("cut", []):
+        o.append(f'<rect x="{X(nx)}" y="{Y(ny)}" width="{nw*S}" height="{nh*S+20}" fill="#FFFFFF"/>')
+        o.append(f'<path d="M{X(nx)} {Y(ny+nh)+15} V{Y(ny)} H{X(nx+nw)} V{Y(ny+nh)+15}" fill="none" stroke="#2B2B2B" stroke-width="30"/>')
     # windows: (side, start, length)
     for side, a, L in spec.get("windows", []):
         if side in "tb":
@@ -120,8 +123,12 @@ def svg(spec):
         fs = r.get("fs", 30)
         for i,l in enumerate(lines):
             o.append(f'<text x="{X(lx)}" y="{Y(ly)+(i-len(lines)/2)*fs*1.15}" font-family="Inter" font-size="{fs}" font-weight="500" fill="#1F1F1F" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-opacity="0.55" stroke-width="5">{l}</text>')
-        o.append(f'<text x="{X(lx)}" y="{Y(ly)+(len(lines)/2)*fs*1.15+4}" font-family="Inter" font-size="{fs}" font-weight="400" fill="#1F1F1F" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-opacity="0.55" stroke-width="5">{area} м²</text>')
+        if area: o.append(f'<text x="{X(lx)}" y="{Y(ly)+(len(lines)/2)*fs*1.15+4}" font-family="Inter" font-size="{fs}" font-weight="400" fill="#1F1F1F" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-opacity="0.55" stroke-width="5">{area} м²</text>')
     # dimensions
+    if spec.get("nodims"):
+        o.append(f'<text x="{X(0)}" y="{0.75*S}" font-family="Inter" font-size="44" font-weight="300" letter-spacing="6" fill="#1C1814">{spec["title"]}</text>')
+        o.append(f'<text x="{X(0)}" y="{1.25*S}" font-family="Inter" font-size="30" font-weight="400" fill="#8C5A3A">{spec["sub"]}</text>')
+        o.append("</svg>"); return "\n".join(o)
     yy = Y(H)+1.0*S
     o.append(f'<line x1="{X(0)}" y1="{yy}" x2="{X(W)}" y2="{yy}" stroke="#333" stroke-width="2"/>')
     for xx in (X(0),X(W)): o.append(f'<line x1="{xx}" y1="{yy-14}" x2="{xx}" y2="{yy+14}" stroke="#333" stroke-width="2"/>')
