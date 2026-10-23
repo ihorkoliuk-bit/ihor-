@@ -123,7 +123,7 @@ def svg(spec):
         fs = r.get("fs", 30)
         for i,l in enumerate(lines):
             o.append(f'<text x="{X(lx)}" y="{Y(ly)+(i-len(lines)/2)*fs*1.15}" font-family="Inter" font-size="{fs}" font-weight="500" fill="#1F1F1F" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-opacity="0.55" stroke-width="5">{l}</text>')
-        if area: o.append(f'<text x="{X(lx)}" y="{Y(ly)+(len(lines)/2)*fs*1.15+4}" font-family="Inter" font-size="{fs}" font-weight="400" fill="#1F1F1F" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-opacity="0.55" stroke-width="5">{area} м²</text>')
+        if area: o.append(f'<text x="{X(lx)}" y="{Y(ly)+(len(lines)/2)*fs*1.15+4}" font-family="Inter" font-size="{fs}" font-weight="400" fill="#1F1F1F" text-anchor="middle" paint-order="stroke" stroke="#FFFFFF" stroke-opacity="0.55" stroke-width="5">{area} m²</text>')
     # dimensions
     if spec.get("nodims"):
         o.append(f'<text x="{X(0)}" y="{0.75*S}" font-family="Inter" font-size="44" font-weight="300" letter-spacing="6" fill="#1C1814">{spec["title"]}</text>')
@@ -140,7 +140,7 @@ def svg(spec):
     o.append(f'<rect x="{xx-22}" y="{cy-80}" width="44" height="160" fill="#FFFFFF"/><text x="{xx}" y="{cy}" font-family="Inter" font-size="36" text-anchor="middle" fill="#1F1F1F" transform="rotate(-90 {xx} {cy})" dy="12">{int(H*1000):,}</text>'.replace(",", " "))
     # title
     o.append(f'<text x="{X(0)}" y="{0.75*S}" font-family="Inter" font-size="44" font-weight="300" letter-spacing="6" fill="#1C1814">{spec["title"]}</text>')
-    o.append(f'<text x="{X(W)}" y="{0.75*S}" font-family="Inter" font-size="30" font-weight="400" fill="#8C5A3A" text-anchor="end">{spec["sub"]}</text>')
+    o.append(f'<text x="{X(0)}" y="{1.25*S}" font-family="Inter" font-size="30" font-weight="400" fill="#8C5A3A">{spec["sub"]}</text>')
     o.append('</svg>')
     return "\n".join(o)
 spec = json.load(open(sys.argv[1]))
