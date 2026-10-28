@@ -1,0 +1,6 @@
+{"type": "wall", "layers": [
+ {"name": "plasterboard", "d_mm": 12.5, "lambda": 0.21},
+ {"name": "mineral wool between 140 mm studs", "d_mm": 140, "lambda": 0.035, "bridge": {"fraction": 0.15, "lambda": 0.13}},
+ {"name": "OSB", "d_mm": 11, "lambda": 0.13},
+ {"name": "wood-fibre board", "d_mm": 60, "lambda": 0.038}
+]}

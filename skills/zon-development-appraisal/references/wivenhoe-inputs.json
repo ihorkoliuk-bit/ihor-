@@ -1,0 +1,34 @@
+{
+ "base": {
+  "units": [
+   {"name": "Lake House Compact", "count": 15, "gia": 61.5, "price": 350000},
+   {"name": "Lake House", "count": 7, "gia": 92.2, "price": 410000},
+   {"name": "Country Residence", "count": 3, "gia": 140, "price": 600000}
+  ],
+  "build_rate": 1700,
+  "external_works": 875000,
+  "contingency_pct": 0.05,
+  "fees_pct": 0.10,
+  "obligations": {"S106, RAMS and BNG": 429000},
+  "sales_pct": 0.025,
+  "sales_legal_per_unit": 1500,
+  "land": 1500000,
+  "land_costs": 90000,
+  "finance_rate": 0.09,
+  "avg_draw": 0.5,
+  "months": 24,
+  "debt_ltc": 0.70,
+  "pref_rate": 0.12,
+  "pref_months": 24,
+  "pref_basis": "simple",
+  "target_margin": 0.20,
+  "affordable_share": 0,
+  "affordable_type": "Lake House Compact",
+  "affordable_value_pct": 0.60
+ },
+ "scenarios": [
+  {"name": "Conservative private"},
+  {"name": "Planning: 30% affordable", "set": {"affordable_share": 0.30}},
+  {"name": "Build +£300/m²", "set": {"build_rate": 2000}}
+ ]
+}

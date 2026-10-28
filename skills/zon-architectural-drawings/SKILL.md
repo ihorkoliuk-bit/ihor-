@@ -63,3 +63,7 @@ Send the PDF (for print, true scale) and PNG (for decks). In the reply give: sca
 ## Style
 
 The default palette matches the ZON investor deck (warm oak floors, grey tiled wet rooms, near-black walls, Inter type, copper accent). Room labels show name, area to 0.01 m² and clear size in mm. English labels unless the user asks otherwise.
+
+## Related ZON skills
+
+zon-uk-planning (what the consent allows, NDSS/M4(2) and Building Regulations), zon-structural-prelim (spans and foundations behind the plan), zon-building-performance (U-values, heat loss, overheating from glazing), zon-development-appraisal (turns the measured GIA into GDV and cost).

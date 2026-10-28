@@ -1,0 +1,9 @@
+{"external_design_temp": -2.0, "pv_kwp": 4.0, "fabric_check": {"wall": 0.17, "roof": 0.11, "floor": 0.13, "window": 1.2},
+ "rooms": [
+  {"name": "Kitchen / Living", "temp": 21, "floor_area": 28.5, "volume": 85, "ach": 0.5,
+   "elements": [{"U": 0.17, "area": 22}, {"U": 1.2, "area": 9}, {"U": 0.11, "area": 28.5}, {"U": 0.13, "area": 28.5}]},
+  {"name": "Bedroom 1", "temp": 18, "floor_area": 12, "volume": 30, "ach": 0.5,
+   "elements": [{"U": 0.17, "area": 10}, {"U": 1.2, "area": 2.4}, {"U": 0.11, "area": 12}, {"U": 0.13, "area": 12}]},
+  {"name": "Bathroom", "temp": 22, "floor_area": 4.5, "volume": 11, "ach": 1.5,
+   "elements": [{"U": 0.17, "area": 5}, {"U": 1.2, "area": 0.8}, {"U": 0.11, "area": 4.5}, {"U": 0.13, "area": 4.5}]}
+ ]}
