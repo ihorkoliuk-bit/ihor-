@@ -1,6 +1,6 @@
 {
  "name": "Lake House",
- "subtitle": "2 bedrooms + study · single storey · ZON catalogue model",
+ "subtitle": "2 bedrooms + study \u00b7 single storey \u00b7 ZON catalogue model",
  "internal": {
   "w": 13400,
   "h": 7400
@@ -90,15 +90,26 @@
    "h": 2575
   },
   {
-   "name": "Bathroom 2",
+   "name": "Plant",
    "x": 7005,
    "y": 4825,
-   "w": 3045,
+   "w": 1015,
+   "h": 2575,
+   "label_at": [
+    7512,
+    6300
+   ]
+  },
+  {
+   "name": "Bathroom 2",
+   "x": 8120,
+   "y": 4825,
+   "w": 1930,
    "h": 2575,
    "floor": "tile",
    "label_at": [
-    8400,
-    5250
+    9100,
+    6000
    ]
   }
  ],
@@ -162,9 +173,16 @@
   },
   {
    "orient": "h",
-   "x": 7300,
+   "x": 8500,
    "y": 4775,
    "width": 800,
+   "swing": 1
+  },
+  {
+   "orient": "h",
+   "x": 7150,
+   "y": 4775,
+   "width": 700,
    "swing": 1
   }
  ],
@@ -196,8 +214,8 @@
   },
   {
    "side": "bottom",
-   "from": 8000,
-   "width": 1000
+   "from": 8600,
+   "width": 900
   },
   {
    "side": "bottom",
@@ -295,7 +313,7 @@
   },
   {
    "type": "shower",
-   "x": 7150,
+   "x": 8170,
    "y": 6400,
    "w": 900,
    "h": 900
@@ -309,8 +327,8 @@
   },
   {
    "type": "basin",
-   "x": 8400,
-   "y": 6800,
+   "x": 9350,
+   "y": 4900,
    "w": 600,
    "h": 450
   }

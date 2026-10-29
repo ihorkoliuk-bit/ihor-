@@ -1,23 +1,156 @@
 {
  "name": "Lake House",
+ "note": "Opening positions from the plan (lake-house.plan.json, external coords = internal + 300). Materials from the catalogue render: oak vertical boarding with black standing-seam bands, standing-seam metal roof, stone plinth, glazed west gable opening onto the terrace. Sills/heads in mm above GL; FFL = +450.",
  "elevations": [
-  {"name": "Gable elevation (garden)", "width": 8000, "eaves": 2700, "ridge": 5900, "roof": "gable-front",
-   "wall": "dark-timber", "gable_fill": "timber", "roof_mat": "metal", "plinth": 450, "overhang": 250,
+  {
+   "name": "South elevation (entrance)",
+   "width": 14000,
+   "eaves": 2700,
+   "ridge": 5900,
+   "roof": "eaves-front",
+   "wall": "timber",
+   "roof_mat": "metal",
+   "plinth": 450,
+   "overhang": 250,
+   "bands": [
+    {
+     "x": 0,
+     "w": 3000,
+     "from": 450,
+     "to": 2700,
+     "mat": "dark-timber"
+    },
+    {
+     "x": 4000,
+     "w": 1400,
+     "from": 450,
+     "to": 2700,
+     "mat": "dark-timber"
+    },
+    {
+     "x": 12400,
+     "w": 1600,
+     "from": 450,
+     "to": 2700,
+     "mat": "dark-timber"
+    }
+   ],
    "openings": [
-     {"x": 800, "sill": 450, "w": 6400, "h": 2250, "panes": 4},
-     {"x": 1400, "sill": 2900, "w": 5200, "h": 2300, "gable": true}
-   ]},
-  {"name": "Long elevation (entrance)", "width": 14000, "eaves": 2700, "ridge": 5900, "roof": "eaves-front",
-   "wall": "timber", "roof_mat": "metal", "plinth": 450, "overhang": 250,
-   "bands": [{"x": 0, "w": 1200, "from": 450, "to": 2700, "mat": "dark-timber"},
-             {"x": 5600, "w": 1500, "from": 450, "to": 2700, "mat": "dark-timber"},
-             {"x": 12600, "w": 1400, "from": 450, "to": 2700, "mat": "dark-timber"}],
+    {
+     "x": 700,
+     "sill": 450,
+     "w": 1800,
+     "h": 2100,
+     "panes": 2
+    },
+    {
+     "x": 4200,
+     "sill": 450,
+     "w": 1000,
+     "h": 2100,
+     "type": "door"
+    },
+    {
+     "x": 8900,
+     "sill": 1550,
+     "w": 900,
+     "h": 800
+    },
+    {
+     "x": 11600,
+     "sill": 1550,
+     "w": 1200,
+     "h": 800
+    }
+   ]
+  },
+  {
+   "name": "West gable (garden / terrace)",
+   "width": 8000,
+   "eaves": 2700,
+   "ridge": 5900,
+   "roof": "gable-front",
+   "wall": "timber",
+   "gable_fill": "timber",
+   "roof_mat": "metal",
+   "plinth": 450,
+   "overhang": 250,
    "openings": [
-     {"x": 1700, "sill": 900, "w": 900, "h": 1500, "panes": 1},
-     {"x": 3900, "sill": 450, "w": 1000, "h": 2100, "type": "door"},
-     {"x": 5900, "sill": 900, "w": 900, "h": 1500},
-     {"x": 8400, "sill": 900, "w": 1000, "h": 1500},
-     {"x": 11300, "sill": 900, "w": 1000, "h": 1500}
-   ]}
+    {
+     "x": 1300,
+     "sill": 450,
+     "w": 5400,
+     "h": 2150,
+     "panes": 4
+    },
+    {
+     "x": 1400,
+     "sill": 2900,
+     "w": 5200,
+     "h": 2300,
+     "gable": true
+    }
+   ]
+  },
+  {
+   "name": "North elevation (rear)",
+   "width": 14000,
+   "eaves": 2700,
+   "ridge": 5900,
+   "roof": "eaves-front",
+   "wall": "timber",
+   "roof_mat": "metal",
+   "plinth": 450,
+   "overhang": 250,
+   "openings": [
+    {
+     "x": 1300,
+     "sill": 1250,
+     "w": 1400,
+     "h": 1300
+    },
+    {
+     "x": 4900,
+     "sill": 1250,
+     "w": 1600,
+     "h": 1300,
+     "panes": 2
+    },
+    {
+     "x": 8200,
+     "sill": 1250,
+     "w": 1200,
+     "h": 1300
+    },
+    {
+     "x": 11400,
+     "sill": 1500,
+     "w": 1800,
+     "h": 900,
+     "panes": 2
+    }
+   ]
+  },
+  {
+   "name": "East gable",
+   "width": 8000,
+   "eaves": 2700,
+   "ridge": 5900,
+   "roof": "gable-front",
+   "wall": "timber",
+   "gable_fill": "timber",
+   "roof_mat": "metal",
+   "plinth": 450,
+   "overhang": 250,
+   "openings": [
+    {
+     "x": 3100,
+     "sill": 1250,
+     "w": 2000,
+     "h": 1300,
+     "panes": 2
+    }
+   ]
+  }
  ]
 }

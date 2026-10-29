@@ -75,8 +75,8 @@ def main():
     out = sys.argv[2]
     els = spec["elevations"]
     font = 'font-family="Inter, Helvetica, Arial, sans-serif"'
-    cols = 1
-    rows = len(els)
+    cols = spec.get("cols", 2 if len(els) > 2 else 1)
+    rows = -(-len(els) // cols)
     cell_w = (PAPER_W - 2 * MARGIN) / cols
     cell_h = (PAPER_H - 2 * MARGIN - 20) / rows
     maxw = max(e["width"] + 2 * e.get("overhang", 300) for e in els)
